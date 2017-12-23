@@ -1,9 +1,7 @@
 package ua.com.juja.sqlcmd.Controller;
 
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
-import ua.com.juja.sqlcmd.Model.InMemoryDatabaseManager;
-import ua.com.juja.sqlcmd.Model.JDBCDataBaseManager;
-import ua.com.juja.sqlcmd.View.Console;
+
 import ua.com.juja.sqlcmd.View.View;
 
 /**
@@ -11,10 +9,25 @@ import ua.com.juja.sqlcmd.View.View;
  */
 public class MainController {
 
-    public static void main(String[] args) {
-        View view=new Console();
-        DataBaseManager manager=new JDBCDataBaseManager();
+    private View view;
+   private DataBaseManager manager;
 
+   public MainController(View view,DataBaseManager manager){
+       this.view=view;
+       this.manager=manager;
+   }
+
+
+
+    public static void main(String[] args) {
+
+    }
+
+    public void run() {
+       connectToDb();
+    }
+
+    private void connectToDb() {
         view.write("Привет мой господин");
         view.write("Введите имя базы пользователя и пароль в формате: database|userName|password");
         while (true) {
@@ -22,7 +35,7 @@ public class MainController {
             String[] data = string.split("[|]");
             String databaseName = data[0];
             String userName = data[1];
-            
+
             String password = data[2];
             try {
                 manager.connect(databaseName, userName, password);

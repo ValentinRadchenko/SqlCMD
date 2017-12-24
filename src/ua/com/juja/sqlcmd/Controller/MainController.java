@@ -29,7 +29,7 @@ public class MainController {
 
     private void connectToDb() {
         view.write("Привет мой господин");
-        view.write("Введите имя базы пользователя и пароль в формате: database|userName|password");
+        view.write("Введите имя базы пользователя и пароль в формате: Database|userName|Password");
         while (true) {
             String string = view.read();
             String[] data = string.split("[|]");

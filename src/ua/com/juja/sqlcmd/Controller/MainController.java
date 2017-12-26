@@ -31,24 +31,30 @@ public class MainController {
         view.write("Привет мой господин");
         view.write("Введите имя базы пользователя и пароль в формате: Database|userName|Password");
         while (true) {
+            try{
             String string = view.read();
             String[] data = string.split("[|]");
+            if(data.length!=3){
+                throw new IllegalArgumentException(" - Неверно количество параметров разделенных знаком | ожидается 3 а введено " +" "+data.length);
+            }
             String databaseName = data[0];
             String userName = data[1];
-
             String password = data[2];
-            try {
                 manager.connect(databaseName, userName, password);
-                 break;
+                break;
             } catch (Exception e) {
 
-                String message=e.getMessage();
-                if(e.getCause()!=null){message+=" "+e.getCause().getMessage();}
-                view.write("Неудача по причине"+message);
-                view.write("Повторите попытку");
+                printError(e);
             }
 
         }
         view.write("Успешно подключились");
+    }
+
+    private void printError(Exception e) {
+        String message=e.getMessage();
+        if(e.getCause()!=null){message+=" "+e.getCause().getMessage();}
+        view.write("Неудача по причине"+ message);
+        view.write("Повторите попытку");
     }
 }

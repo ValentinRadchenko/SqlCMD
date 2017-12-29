@@ -2,7 +2,11 @@ package ua.com.juja.sqlcmd.Controller;
 
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 
+import ua.com.juja.sqlcmd.Model.DataSet;
 import ua.com.juja.sqlcmd.View.View;
+
+
+import java.util.Arrays;
 
 /**
  * Created by Valentin_R on 04.12.2017.
@@ -18,13 +22,86 @@ public class MainController {
    }
 
 
+    public void run() {
+       connectToDb();
+      while (true) {
+          view.write("Введи команду или help для помощи ");
+          String command = view.read();
+          if (command.equals("list")) {
+              doList();
 
-    public static void main(String[] args) {
+          } else if (command.equals("help")) {
+              doHelp();
+          } else if (command.startsWith("find|")) {
+              doFind(command);
+          } else if (command.equals("exit")) {
+              view.write("До скорой встречи!");
+              System.exit(0);
+          } else {
+              view.write("Несуществующая команда");
+          }
+
+      }
+    }
+
+    private void doFind(String command) {
+        String[] data =command.split("\\|");
+        String tableName=data[1];
+        DataSet[]tableData=manager.getTableData(tableName);
+        String[] tableColumns= manager.getTableColumns(tableName);
+       printHeader(tableColumns);
+       printTable(tableData);
 
     }
 
-    public void run() {
-       connectToDb();
+    private void printTable(DataSet[] tableData) {
+   for(DataSet row: tableData){
+       printRow(row);
+   }
+
+    }
+
+    private void printRow(DataSet row) {
+        Object[] values = row.getValues();
+        String result = "|";
+
+        for (Object value : values) {
+
+            result += value + "|";
+        }
+        view.write(result);
+    }
+    private void printHeader(String[] tableColumns) {
+
+        String result="|";
+
+        for(String name: tableColumns){
+
+            result+= name+"|";
+
+        }
+     view.write(result);
+   }
+
+    private void doHelp() {
+     view.write("Существующие комманды");
+
+        view.write("\tfind|tableNames");
+        view.write(": Для получения содержимого таблицы tableNames");
+
+      view.write("\tlist");
+     view.write(": Для вывода списка всех таблиц");
+
+     view.write("\tHelp");
+     view.write(": Для вывода сриска всех комманд");
+
+     view.write("\texit");
+     view.write("\t\tДля выхода из программы");
+    }
+
+    private void doList() {
+
+       view.write(Arrays.toString(manager.getTableNames()));
     }
 
     private void connectToDb() {

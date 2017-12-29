@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.Model;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -77,4 +78,15 @@ public abstract  class DataBaseManagerTest {
         assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
         assertEquals("[Pup, pass2, 13]", Arrays.toString(user.getValues()));
     }
+
+    @Test
+    public void testGetColumnNames(){
+        manager.clear("users");
+
+        String[]columnNames=manager.getTableColumns("users");
+
+
+        assertEquals("[name, password, id]",Arrays.toString(columnNames));
+    }
+
 }

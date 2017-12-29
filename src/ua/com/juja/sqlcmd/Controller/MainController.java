@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.Controller;
 
+import ua.com.juja.sqlcmd.Controller.Command.Command;
+import ua.com.juja.sqlcmd.Controller.Command.Exit;
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 
 import ua.com.juja.sqlcmd.Model.DataSet;
@@ -13,12 +15,14 @@ import java.util.Arrays;
  */
 public class MainController {
 
+    private Command[] commands;
     private View view;
    private DataBaseManager manager;
 
    public MainController(View view,DataBaseManager manager){
        this.view=view;
        this.manager=manager;
+       this.commands= new Command[]{new Exit(view)};
    }
 
 
@@ -34,9 +38,8 @@ public class MainController {
               doHelp();
           } else if (command.startsWith("find|")) {
               doFind(command);
-          } else if (command.equals("exit")) {
-              view.write("До скорой встречи!");
-              System.exit(0);
+          } else if (commands[0].canProcess(command)) {
+              commands[0].process(command);
           } else {
               view.write("Несуществующая команда");
           }
@@ -69,18 +72,16 @@ public class MainController {
 
             result += value + "|";
         }
-        view.write(result);
+         view.write(result);
     }
     private void printHeader(String[] tableColumns) {
-
         String result="|";
-
         for(String name: tableColumns){
-
             result+= name+"|";
-
         }
+     view.write("===================");
      view.write(result);
+     view.write("===================");
    }
 
     private void doHelp() {

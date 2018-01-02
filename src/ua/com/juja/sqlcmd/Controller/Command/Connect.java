@@ -7,6 +7,10 @@ import ua.com.juja.sqlcmd.View.View;
  * Created by Valentin_R on 02.01.2018.
  */
 public class Connect implements Command {
+
+
+   private static String COMMAND_SAMPLE="connect|MySqlCmd|postgres|java";
+
     private DataBaseManager manager;
     private View view;
 
@@ -26,9 +30,11 @@ public class Connect implements Command {
 
             try{
 
-                String[] data = command.split("[|]");
-                if(data.length!=4){
-                    throw new IllegalArgumentException(" - Неверно количество параметров разделенных знаком | ожидается 4 а введено " +" "+data.length);
+                String[] data = command.split("\\|");
+                if(data.length!= count()){
+                    throw new IllegalArgumentException(String.format(" -" +
+                            " Неверно количество параметров разделенных знаком |" +
+                            " ожидается $s а введено $s", count(),data.length));
                 }
                 String databaseName = data[1];
                 String userName = data[2];
@@ -43,6 +49,9 @@ public class Connect implements Command {
 
         }
 
+    private int count() {
+        return COMMAND_SAMPLE.split("\\|").length;
+    }
 
 
     private void printError(Exception e) {

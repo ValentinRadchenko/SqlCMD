@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by indigo on 21.08.2015.
@@ -89,4 +90,8 @@ public abstract  class DataBaseManagerTest {
         assertEquals("[name, password, id]",Arrays.toString(columnNames));
     }
 
+    @Test
+    public void testisConnected(){
+        assertTrue(manager.isConnected());
+    }
 }

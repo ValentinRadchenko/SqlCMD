@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.Controller;
 import ua.com.juja.sqlcmd.Controller.Command.Command;
 import ua.com.juja.sqlcmd.Controller.Command.Exit;
 import ua.com.juja.sqlcmd.Controller.Command.Help;
+import ua.com.juja.sqlcmd.Controller.Command.list;
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 
 import ua.com.juja.sqlcmd.Model.DataSet;
@@ -10,6 +11,7 @@ import ua.com.juja.sqlcmd.View.View;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Valentin_R on 04.12.2017.
@@ -23,7 +25,7 @@ public class MainController {
    public MainController(View view,DataBaseManager manager){
        this.view=view;
        this.manager=manager;
-       this.commands= new Command[]{new Exit(view),new Help(view)};
+       this.commands= new Command[]{new Exit(view),new Help(view),new list(manager,view)};
    }
 
 
@@ -32,9 +34,9 @@ public class MainController {
       while (true) {
           view.write("Введи команду или help для помощи ");
           String command = view.read();
-          if (command.equals("list")) {
-              doList();
 
+          if (commands[2].canProcess(command)) {
+              commands[2].process(command);
           } else if (commands[1].canProcess(command)) {
               commands[1].process(command);
           } else if (command.startsWith("find|")) {
@@ -85,10 +87,7 @@ public class MainController {
      view.write("===================");
    }
 
-    private void doList() {
 
-       view.write(Arrays.toString(manager.getTableNames()));
-    }
 
     private void connectToDb() {
         view.write("Привет мой господин");

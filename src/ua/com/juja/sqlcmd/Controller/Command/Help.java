@@ -22,6 +22,9 @@ public class Help implements Command {
     public void process(String command) {
         view.write("Существующие комманды");
 
+        view.write("\tconnect|databaseName|userName|password");
+        view.write("\t\t: Для подключения к базе данных, с которой будем работать");
+
         view.write("\tfind|tableNames");
         view.write("\t\t: Для получения содержимого таблицы tableNames");
 

@@ -34,17 +34,24 @@ public class MainController {
 
 
     public void run() {
+        try{
+            doWork();
+         }catch (ExitException e){
+
+        }
+    }
+
+    private void doWork() {
         view.write("Привет мой господин");
         view.write("Введите имя базы пользователя и пароль в формате: connect|database|userName|Password");
+
         while (true) {
 
             String input = view.read();
-           if(input==null){
-              new Exit(view).process(input);
-           }
-
+            if(input==null){
+                new Exit(view).process(input);
+            }
             for (Command command : commands) {
-
                 if (command.canProcess(input)) {
                     command.process(input);
                     break;
@@ -53,6 +60,7 @@ public class MainController {
             view.write("Введи команду или help для помощи ");
         }
     }
+
 }
 
 

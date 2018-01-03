@@ -9,6 +9,7 @@ public class Unsupported implements Command {
     private View view;
 
     public Unsupported(View view) {
+
         this.view = view;
     }
 
@@ -19,6 +20,6 @@ public class Unsupported implements Command {
 
     @Override
     public void process(String command) {
-        view.write("Несуществующая команда");
+        view.write("Несуществующая команда: "+command);
     }
 }

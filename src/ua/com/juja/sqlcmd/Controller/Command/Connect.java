@@ -34,7 +34,7 @@ public class Connect implements Command {
                 if(data.length!= count()){
                     throw new IllegalArgumentException(String.format(" -" +
                             " Неверно количество параметров разделенных знаком |" +
-                            " ожидается $s а введено $s", count(),data.length));
+                            " ожидается %s а введено %s", count(),data.length));
                 }
                 String databaseName = data[1];
                 String userName = data[2];

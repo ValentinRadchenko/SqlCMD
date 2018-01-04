@@ -28,6 +28,8 @@ public class MainController {
                 new Exit(view),
                 new isConnect(manager,view),
                 new list(manager, view),
+                new Clear(manager,view),
+                new Create(manager,view),
                 new Find(manager, view),
                 new Unsupported(view)};
     }

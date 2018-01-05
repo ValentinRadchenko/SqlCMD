@@ -26,7 +26,7 @@ public class Clear implements Command{
     public void process(String command) {
         String[]data=command.split("\\|");
         if(data.length!=2){
-            throw new IllegalArgumentException("Формат комаеды clear|tableName , а ты ввел" +command);
+            throw new IllegalArgumentException(String.format("  Формат команды clear|tableName , а ты ввел %s",command));
         }
         manager.clear(data[1]);
         view.write(String.format("Таблица %s была успешно очищена",data[1]));

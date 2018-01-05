@@ -50,17 +50,37 @@ public class MainController {
         while (true) {
 
             String input = view.read();
-            if(input==null){
+            if (input == null) {
                 new Exit(view).process(input);
+                break;
             }
             for (Command command : commands) {
+                try{
                 if (command.canProcess(input)) {
+
                     command.process(input);
                     break;
+                    }
+                    } catch (Exception e) {
+                      if(e instanceof ExitException){
+                        throw new ExitException();
+                      }
+                      printError(e);
+                      break;
+                    }
+
                 }
+                view.write("Введи команду или help для помощи ");
             }
-            view.write("Введи команду или help для помощи ");
         }
+
+
+
+    private void printError(Exception e) {
+        String message=e.getMessage();
+        if(e.getCause()!=null){message+=" "+e.getCause().getMessage();}
+        view.write("Неудача по причине"+ message);
+        view.write("Повторите попытку");
     }
 
 }

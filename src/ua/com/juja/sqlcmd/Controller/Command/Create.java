@@ -26,7 +26,7 @@ public class Create implements Command {
     public void process(String command) {
          String[] data = command.split( "\\|" );
          if(data.length%2!=0){
-             throw new IllegalArgumentException("Должно быть четное количество параметров, а вы ввели "+ command);
+             throw new IllegalArgumentException(String.format("Должно быть четное количество параметров, а вы ввели %s", command));
          }
 
 

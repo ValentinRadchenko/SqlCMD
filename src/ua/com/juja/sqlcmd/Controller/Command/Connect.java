@@ -28,7 +28,7 @@ public class Connect implements Command {
     public void process(String command) {
 
 
-            try{
+
 
                 String[] data = command.split("\\|");
                 if(data.length!= count()){
@@ -42,11 +42,6 @@ public class Connect implements Command {
                 manager.connect(databaseName, userName, password);
                 view.write("Успешно подключились");
 
-            } catch (Exception e) {
-
-                printError(e);
-            }
-
         }
 
     private int count() {
@@ -54,12 +49,7 @@ public class Connect implements Command {
     }
 
 
-    private void printError(Exception e) {
-        String message=e.getMessage();
-        if(e.getCause()!=null){message+=" "+e.getCause().getMessage();}
-        view.write("Неудача по причине"+ message);
-        view.write("Повторите попытку");
-    }
+
 }
 
 

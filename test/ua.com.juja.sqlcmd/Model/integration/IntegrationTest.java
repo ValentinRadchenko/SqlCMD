@@ -191,4 +191,45 @@ public class IntegrationTest {
                 "До скорой встречи!\r\n",getData());
 
     }
+
+    @Test
+    public void testCreateWithErrors(){
+
+
+        in.add("connect|MySqlCmd|postgres|java");
+
+        in.add("create|users|error");
+
+        in.add("exit");
+        Main.main(new String[0]);
+        assertEquals("Привет мой господин\r\n" +
+                "Введите имя базы пользователя и пароль в формате: connect|database|userName|Password\r\n" +
+                "Успешно подключились\r\n" +
+                "Введи команду или help для помощи \r\n" +
+                "Неудача по причинеДолжно быть четное количество параметров, а вы ввели create|users|error\r\n" +
+                "Повторите попытку\r\n" +
+                "Введи команду или help для помощи \r\n" +
+                "До скорой встречи!\r\n",getData());
+
+    }
+
+    @Test
+    public void testClearWithErrors(){
+
+
+        in.add("connect|MySqlCmd|postgres|java");
+        in.add("clear|");
+        in.add("exit");
+        Main.main(new String[0]);
+        assertEquals("Привет мой господин\r\n" +
+                "Введите имя базы пользователя и пароль в формате: connect|database|userName|Password\r\n" +
+                "Успешно подключились\r\n" +
+                "Введи команду или help для помощи \r\n" +
+                "Неудача по причине  Формат команды clear|tableName , а ты ввел clear|\r\n" +
+                "Повторите попытку\r\n" +
+                "Введи команду или help для помощи \r\n" +
+                "До скорой встречи!\r\n",getData());
+
+    }
+
 }

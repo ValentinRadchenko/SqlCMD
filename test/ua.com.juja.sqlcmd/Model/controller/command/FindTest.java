@@ -3,8 +3,12 @@ package ua.com.juja.sqlcmd.Model.controller.command;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 import ua.com.juja.sqlcmd.Controller.Command.Command;
+import ua.com.juja.sqlcmd.Controller.Command.Exit;
 import ua.com.juja.sqlcmd.Controller.Command.Find;
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 import ua.com.juja.sqlcmd.Model.DataSet;
@@ -61,5 +65,68 @@ public class FindTest {
         assertEquals("[===================, |id|name|password|," +
                 " ===================, |12|Stiven|*****|," +
                 " |13|Eva|+++++|]",captor.getAllValues().toString());
+    }
+
+
+
+    @Test
+    public void testCanProcessFindWithParameters(){
+
+        Command command =new Find(manager,view);
+
+        boolean canProcess= command.canProcess("find|users");
+
+        assertTrue(canProcess);
+
+    }
+
+
+    @Test
+    public void testCanProcessFindWithoutParameters(){
+
+        Command command =new Find(manager,view);
+
+        boolean canProcess= command.canProcess("find");
+
+        assertFalse(canProcess);
+
+    }
+
+    @Test
+    public void testCanProcessFindQweParameters(){
+
+        Command command =new Find(manager,view);
+
+        boolean canProcess= command.canProcess("Qwe|users");
+
+        assertFalse(canProcess);
+
+    }
+
+    @Test
+    public void testPrintEmptyTableData(){
+        //given
+
+        Command command=new Find(manager,view);
+        when(manager.getTableColumns("users")).
+                thenReturn(new String[]{"id","name","password"});
+
+
+
+        DataSet[] data=new DataSet[0];
+        when(manager.getTableData("users")).thenReturn(data);
+        //when
+
+        command.process("find|users");
+
+        //then
+        ArgumentCaptor<String> captor=ArgumentCaptor.forClass(String.class);
+        verify(view,atLeastOnce()).write(captor.capture());
+        assertEquals(
+                "[===================," +
+                        " |id|name|password|," +
+                         " ===================]"
+
+                ,captor.getAllValues().toString());
     }
 }

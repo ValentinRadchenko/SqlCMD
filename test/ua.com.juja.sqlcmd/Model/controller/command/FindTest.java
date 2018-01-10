@@ -25,20 +25,20 @@ public class FindTest {
 
     private DataBaseManager manager;
     private View view;
-
+    private Command command;
     @Before
     public void setup(){
 
         manager=mock(DataBaseManager.class);
         view=mock(View.class);
-
+        command=new Find(manager,view);
     }
 
     @Test
     public void testPrintTableData(){
         //given
 
-        Command command=new Find(manager,view);
+
         when(manager.getTableColumns("users")).
                 thenReturn(new String[]{"id","name","password"});
 
@@ -58,24 +58,27 @@ public class FindTest {
         //when
 
         command.process("find|users");
+        String expected = "[===================, " +
+                "|id|name|password|," +
+                " ===================, " +
+                "|12|Stiven|*****|," +
+                " |13|Eva|+++++|]";
 
         //then
-        ArgumentCaptor<String> captor=ArgumentCaptor.forClass(String.class);
-        verify(view,atLeastOnce()).write(captor.capture());
-        assertEquals("[===================, |id|name|password|," +
-                " ===================, |12|Stiven|*****|," +
-                " |13|Eva|+++++|]",captor.getAllValues().toString());
+        shouldPrint(expected);
     }
 
+    private void shouldPrint(String expected) {
+        ArgumentCaptor<String> captor=ArgumentCaptor.forClass(String.class);
+        verify(view,atLeastOnce()).write(captor.capture());
+        assertEquals(expected,captor.getAllValues().toString());
+    }
 
 
     @Test
     public void testCanProcessFindWithParameters(){
 
-        Command command =new Find(manager,view);
-
-        boolean canProcess= command.canProcess("find|users");
-
+         boolean canProcess= command.canProcess("find|users");
         assertTrue(canProcess);
 
     }
@@ -84,7 +87,7 @@ public class FindTest {
     @Test
     public void testCanProcessFindWithoutParameters(){
 
-        Command command =new Find(manager,view);
+
 
         boolean canProcess= command.canProcess("find");
 
@@ -95,7 +98,6 @@ public class FindTest {
     @Test
     public void testCanProcessFindQweParameters(){
 
-        Command command =new Find(manager,view);
 
         boolean canProcess= command.canProcess("Qwe|users");
 
@@ -107,7 +109,7 @@ public class FindTest {
     public void testPrintEmptyTableData(){
         //given
 
-        Command command=new Find(manager,view);
+
         when(manager.getTableColumns("users")).
                 thenReturn(new String[]{"id","name","password"});
 
@@ -120,13 +122,8 @@ public class FindTest {
         command.process("find|users");
 
         //then
-        ArgumentCaptor<String> captor=ArgumentCaptor.forClass(String.class);
-        verify(view,atLeastOnce()).write(captor.capture());
-        assertEquals(
-                "[===================," +
-                        " |id|name|password|," +
-                         " ===================]"
-
-                ,captor.getAllValues().toString());
+        shouldPrint("[===================," +
+                " |id|name|password|," +
+                 " ===================]");
     }
 }

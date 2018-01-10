@@ -6,4 +6,6 @@ package ua.com.juja.sqlcmd.View;
 public interface View {
     void write(String message);
     String read();
+
+
 }

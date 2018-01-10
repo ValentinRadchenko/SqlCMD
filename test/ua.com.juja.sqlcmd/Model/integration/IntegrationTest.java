@@ -143,8 +143,6 @@ public class IntegrationTest {
                 "===================\r\n" +
                 "|name|password|id|\r\n" +
                 "===================\r\n" +
-                "|Stiven|+++++|13|\r\n" +
-                "|Silva|*****|15|\r\n" +
                 "Введи команду или help для помощи \r\n" +
                 "До скорой встречи!\r\n",getData());
 

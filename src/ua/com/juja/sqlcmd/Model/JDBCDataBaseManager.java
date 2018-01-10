@@ -13,11 +13,11 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public DataSet[] getTableData(String tableName) {
-        try {
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM public." + tableName);){
             int size = getSize(tableName);
 
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM public." + tableName);
+
             ResultSetMetaData rsmd = rs.getMetaData();
             DataSet[] result = new DataSet[size];
             int index = 0;
@@ -28,8 +28,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
                     dataSet.put(rsmd.getColumnName(i), rs.getObject(i));
                 }
             }
-            rs.close();
-            stmt.close();
+
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,17 +47,16 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public String[] getTableNames() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'");
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'");){
+
             String[] tables = new String[100];
             int index = 0;
             while (rs.next()) {
                 tables[index++] = rs.getString("table_name");
             }
             tables = Arrays.copyOf(tables, index, String[].class);
-            rs.close();
-            stmt.close();
+
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,6 +73,9 @@ public class JDBCDataBaseManager implements DataBaseManager {
             throw new RuntimeException("Please add jdbc jar to project.", e);
         }
           try {
+            if(connection!=null){
+                connection.close();
+            }
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/" + database, userName,
                     password);
@@ -98,15 +99,13 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void create(String tablaName, DataSet input) {
-        try {
-            Statement stmt = connection.createStatement();
-
-            String tableNames = getNameFormated(input, "%s,");
+        try( Statement stmt = connection.createStatement();) {
+             String tableNames = getNameFormated(input, "%s,");
             String values = getValuesFormated(input, "'%s',");
 
             stmt.executeUpdate("INSERT INTO public."+tablaName+"(" + tableNames + ")" +
                     "VALUES (" + values + ")");
-            stmt.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,14 +145,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public String[] getTableColumns(String tableName) {
-        try {
-            Statement stmt = connection.createStatement();
-
-            ResultSet rs = stmt.executeQuery("select column_name from information_schema.columns where table_name='users'");
-
-
-            //  ResultSet rs = stmt.executeQuery("SELECT * FROM information_schema.columns WHERE table_schema='public' AND table_type='BASE TABLE'");
-
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("select column_name from information_schema.columns where table_name='users'");){
 
             String[] tables = new String[100];
             int index = 0;
@@ -161,8 +154,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
                 tables[index++] = rs.getString("column_name");
             }
             tables = Arrays.copyOf(tables, index, String[].class);
-            rs.close();
-            stmt.close();
+
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();

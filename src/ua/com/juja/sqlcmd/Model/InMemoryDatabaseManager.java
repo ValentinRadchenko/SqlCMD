@@ -1,6 +1,9 @@
 package ua.com.juja.sqlcmd.Model;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by Valentin_R on 03.12.2017.
@@ -27,8 +30,8 @@ public class InMemoryDatabaseManager implements DataBaseManager{
     }
 
     @Override
-    public String[] getTableNames() {
-        return new String [] {TABLE_NAME};
+    public Set<String> getTableNames() {
+        return new LinkedHashSet<String>(Arrays.asList(TABLE_NAME));
     }
 
     @Override

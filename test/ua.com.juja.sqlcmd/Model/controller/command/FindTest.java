@@ -38,9 +38,7 @@ public class FindTest {
     public void testPrintTableData(){
         //given
 
-
-        when(manager.getTableColumns("users")).
-                thenReturn(new LinkedHashSet<String>(Arrays.asList("id","name","password")));
+ setupTableColumns("users","id","name","password");
 
 
         DataSet user1=new DataSet();
@@ -66,6 +64,13 @@ public class FindTest {
 
         //then
         shouldPrint(expected);
+    }
+
+    private void setupTableColumns(String users, String ...args) {
+
+        when(manager.getTableColumns("users")).
+                thenReturn(new LinkedHashSet<String>(Arrays.asList("id","name","password")));
+
     }
 
     private void shouldPrint(String expected) {
@@ -110,8 +115,7 @@ public class FindTest {
         //given
 
 
-        when(manager.getTableColumns("users")).
-                thenReturn(new LinkedHashSet<String>(Arrays.asList("id","name","password")));
+        setupTableColumns("users","id","name","password");
 
 
 

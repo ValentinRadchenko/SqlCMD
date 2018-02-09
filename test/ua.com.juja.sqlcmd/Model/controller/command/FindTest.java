@@ -8,13 +8,10 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 import ua.com.juja.sqlcmd.Controller.Command.Command;
-import ua.com.juja.sqlcmd.Controller.Command.Exit;
 import ua.com.juja.sqlcmd.Controller.Command.Find;
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 import ua.com.juja.sqlcmd.Model.DataSet;
 import ua.com.juja.sqlcmd.View.View;
-
-import javax.lang.model.util.Types;
 
 import static junit.framework.TestCase.assertEquals;
 

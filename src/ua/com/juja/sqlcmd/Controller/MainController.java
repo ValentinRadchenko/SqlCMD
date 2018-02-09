@@ -3,12 +3,7 @@ package ua.com.juja.sqlcmd.Controller;
 import ua.com.juja.sqlcmd.Controller.Command.*;
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 
-import ua.com.juja.sqlcmd.Model.DataSet;
 import ua.com.juja.sqlcmd.View.View;
-
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Valentin_R on 04.12.2017.

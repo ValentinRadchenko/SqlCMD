@@ -85,10 +85,10 @@ public abstract  class DataBaseManagerTest {
     public void testGetColumnNames(){
         manager.clear("users");
 
-        String[]columnNames=manager.getTableColumns("users");
+        Set<String>columnNames=manager.getTableColumns("users");
 
 
-        assertEquals("[name, password, id]",Arrays.toString(columnNames));
+        assertEquals("[name, password, id]",columnNames.toString());
     }
 
     @Test

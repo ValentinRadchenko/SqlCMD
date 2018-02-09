@@ -31,6 +31,7 @@ public class InMemoryDatabaseManager implements DataBaseManager{
 
     @Override
     public Set<String> getTableNames() {
+
         return new LinkedHashSet<String>(Arrays.asList(TABLE_NAME));
     }
 
@@ -63,8 +64,8 @@ public class InMemoryDatabaseManager implements DataBaseManager{
     }
 
     @Override
-    public String[] getTableColumns(String tableName) {
-        return new String[]{"name","password","id"};
+    public Set<String> getTableColumns(String tableName) {
+        return new LinkedHashSet<String>(Arrays.asList("name","password","id"));
     }
 
     @Override

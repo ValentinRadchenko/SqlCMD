@@ -13,6 +13,9 @@ import ua.com.juja.sqlcmd.Model.DataBaseManager;
 import ua.com.juja.sqlcmd.Model.DataSet;
 import ua.com.juja.sqlcmd.View.View;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -37,7 +40,7 @@ public class FindTest {
 
 
         when(manager.getTableColumns("users")).
-                thenReturn(new String[]{"id","name","password"});
+                thenReturn(new LinkedHashSet<String>(Arrays.asList("id","name","password")));
 
 
         DataSet user1=new DataSet();
@@ -108,7 +111,7 @@ public class FindTest {
 
 
         when(manager.getTableColumns("users")).
-                thenReturn(new String[]{"id","name","password"});
+                thenReturn(new LinkedHashSet<String>(Arrays.asList("id","name","password")));
 
 
 

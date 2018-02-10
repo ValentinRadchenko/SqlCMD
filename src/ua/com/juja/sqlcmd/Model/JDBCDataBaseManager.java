@@ -1,12 +1,7 @@
 package ua.com.juja.sqlcmd.Model;
 
-import javafx.scene.effect.SepiaTone;
-
 import java.sql.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by indigo on 21.08.2015.
@@ -17,18 +12,17 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
 
     @Override
-    public DataSet[] getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) {
+        LinkedList<DataSet> result = new LinkedList<DataSet>();
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM public." + tableName);){
-            int size = getSize(tableName);
 
 
             ResultSetMetaData rsmd = rs.getMetaData();
-            DataSet[] result = new DataSet[size];
-            int index = 0;
+
             while (rs.next()) {
-                DataSet dataSet = new DataSet();
-                result[index++] = dataSet;
+                DataSet dataSet = new DataSetImpl();
+                result.add(dataSet);
                 for (int i = 1; i <= rsmd.getColumnCount(); i++) {
                     dataSet.put(rsmd.getColumnName(i), rs.getObject(i));
                 }
@@ -37,7 +31,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
-            return new DataSet[0];
+            return result;
         }
     }
 
@@ -124,7 +118,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void update(String tableName, int id, DataSet newValue) {
+    public void update(String tableName, int id, DataSetImpl newValue) {
         try {
             String tableNames = getNameFormated(newValue, "%s = ?,");
 

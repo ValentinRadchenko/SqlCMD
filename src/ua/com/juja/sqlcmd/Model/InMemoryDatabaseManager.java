@@ -1,9 +1,6 @@
 package ua.com.juja.sqlcmd.Model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Valentin_R on 03.12.2017.
@@ -13,14 +10,14 @@ public class InMemoryDatabaseManager implements DataBaseManager{
     public static final String TABLE_NAME = "users";
 
 
-    private DataSet [] data =new DataSet[1000];
-    private int freeIndex =0;
+    private List<DataSet> data =new LinkedList<DataSet>();
+
 
 
     @Override
-    public DataSet[] getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) {
       validateTable(tableName);
-        return Arrays.copyOf(data, freeIndex);
+        return data;
     }
 
     private void validateTable(String tableName) {
@@ -43,21 +40,21 @@ public class InMemoryDatabaseManager implements DataBaseManager{
     @Override
     public void clear(String tableName) {
         validateTable(tableName);
-            data=new DataSet[1000];
-            freeIndex =0;
+            data.clear();
     }
 
     @Override
-    public void create(String tablaName, DataSet input) {
-       data[freeIndex]=input;
-       freeIndex++;
+    public void create(String tableName, DataSet input) {
+       data.add(input);
+
     }
 
     @Override
-    public void update(String tableName, int id, DataSet newValue) {
-        for (int index = 0; index < freeIndex; index++) {
-            if(data[index].get("id").equals(id)){
-               data[index].updateFrom(newValue);
+    public void update(String tableName, int id, DataSetImpl newValue) {
+     validateTable(tableName);
+        for (DataSet dataSet : data) {
+            if (dataSet.get("id").equals(id)) {
+                dataSet.updateFrom(newValue);
 
             }
         }

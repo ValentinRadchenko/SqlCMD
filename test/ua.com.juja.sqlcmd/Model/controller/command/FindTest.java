@@ -11,10 +11,10 @@ import ua.com.juja.sqlcmd.Controller.Command.Command;
 import ua.com.juja.sqlcmd.Controller.Command.Find;
 import ua.com.juja.sqlcmd.Model.DataBaseManager;
 import ua.com.juja.sqlcmd.Model.DataSet;
+import ua.com.juja.sqlcmd.Model.DataSetImpl;
 import ua.com.juja.sqlcmd.View.View;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -41,26 +41,26 @@ public class FindTest {
  setupTableColumns("users","id","name","password");
 
 
-        DataSet user1=new DataSet();
+        DataSet user1=new DataSetImpl();
         user1.put("id",12);
         user1.put("name","Stiven");
         user1.put("passwors","*****");
 
-        DataSet user2=new DataSet();
+        DataSet user2=new DataSetImpl();
         user2.put("id",13);
         user2.put("name","Eva");
         user2.put("password","+++++");
 
-        DataSet[] data=new DataSet[]{user1,user2};
-        when(manager.getTableData("users")).thenReturn(data);
+        //List<DataSet> data=new LinkedList<DataSet>();
+        when(manager.getTableData("users")).thenReturn(Arrays.asList(user1,user2));
         //when
 
         command.process("find|users");
         String expected = "[===================, " +
                 "|id|name|password|," +
                 " ===================, " +
-                "|12|Stiven|*****|," +
-                " |13|Eva|+++++|]";
+                "|12|Stiven|*****|, " +
+                "|13|Eva|+++++|]";
 
         //then
         shouldPrint(expected);
@@ -113,14 +113,11 @@ public class FindTest {
     @Test
     public void testPrintEmptyTableData(){
         //given
-
-
         setupTableColumns("users","id","name","password");
 
-
-
-        DataSet[] data=new DataSet[0];
-        when(manager.getTableData("users")).thenReturn(data);
+       // List<DataSet> data=new LinkedList<>();
+        when(manager.getTableData("users"))
+                .thenReturn(new ArrayList<DataSet>());
         //when
 
         command.process("find|users");
@@ -130,4 +127,26 @@ public class FindTest {
                 " |id|name|password|," +
                  " ===================]");
     }
+    @Test
+    public void testPrintTableDataWithOneColumn(){
+
+         setupTableColumns("test","id");
+         DataSet user1=new DataSetImpl();
+         user1.put("id",12);
+         DataSet user2=new DataSetImpl();
+         user2.put("id",13);
+         when(manager.getTableData("test")).thenReturn(Arrays.asList(user1,user2));
+
+         command.process("find|test");
+
+        //then
+        shouldPrint("[===================," +
+                " |id|," +
+                " ===================, "+
+                " |12|," +
+                " |13|," +
+                " ===================]");
+    }
+
+
 }

@@ -1,10 +1,10 @@
 package ua.com.juja.sqlcmd.Model;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  */
 public abstract  class DataBaseManagerTest {
 
-    private DataBaseManager manager;
+    private DataBaseManager  manager;
 
 
     public abstract DataBaseManager getDatabaseManager();
@@ -40,17 +40,17 @@ public abstract  class DataBaseManagerTest {
         manager.clear("users");
 
         // when
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("name", "Stiven");
         input.put("password", "pass");
         input.put("id", 13);
         manager.create("users",input);
 
         // then
-        DataSet[] users = manager.getTableData("users");
-        assertEquals(1, users.length);
+        List<DataSet>users = manager.getTableData("users");
+        assertEquals(1, users.size());
 
-        DataSet user = users[0];
+        DataSet user = users.get(0);
         assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
         assertEquals("[Stiven, pass, 13]", Arrays.toString(user.getValues()));
     }
@@ -60,23 +60,23 @@ public abstract  class DataBaseManagerTest {
         // given
         manager.clear("users");
 
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("name", "Stiven");
         input.put("password", "pass");
         input.put("id", 13);
         manager.create("users", input);
 
         // when
-        DataSet newValue = new DataSet();
+        DataSet newValue = new DataSetImpl();
         newValue.put("password", "pass2");
         newValue.put("name", "Pup");
         manager.update("users", 13, newValue);
 
         // then
-        DataSet[] users = manager.getTableData("users");
-        assertEquals(1, users.length);
+        List<DataSet> users = manager.getTableData("users");
+        assertEquals(1, users.size());
 
-        DataSet user = users[0];
+        DataSet user = users.get(0);
         assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
         assertEquals("[Pup, pass2, 13]", Arrays.toString(user.getValues()));
     }

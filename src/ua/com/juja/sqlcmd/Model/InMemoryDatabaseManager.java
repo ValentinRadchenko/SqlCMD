@@ -50,7 +50,7 @@ public class InMemoryDatabaseManager implements DataBaseManager{
     }
 
     @Override
-    public void update(String tableName, int id, DataSetImpl newValue) {
+    public void update(String tableName, int id, DataSet newValue) {
      validateTable(tableName);
         for (DataSet dataSet : data) {
             if (dataSet.get("id").equals(id)) {

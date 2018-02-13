@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.Model;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -7,17 +8,24 @@ import java.util.*;
  */
 public class InMemoryDatabaseManager implements DataBaseManager{
 
+
+
     public static final String TABLE_NAME = "users";
 
-
-    private List<DataSet> data =new LinkedList<DataSet>();
+   private Map<String,List<DataSet>> tables=new LinkedHashMap<>();
+ //   private List<DataSet> data =new LinkedList<DataSet>();
 
 
 
     @Override
     public List<DataSet> getTableData(String tableName) {
       validateTable(tableName);
-        return data;
+        return get(tableName);
+    }
+
+    @Override
+    public int getSize(String tableName)  {
+        return get(tableName).size();
     }
 
     private void validateTable(String tableName) {
@@ -29,7 +37,7 @@ public class InMemoryDatabaseManager implements DataBaseManager{
     @Override
     public Set<String> getTableNames() {
 
-        return new LinkedHashSet<String>(Arrays.asList(TABLE_NAME));
+        return tables.keySet();
     }
 
     @Override
@@ -39,20 +47,31 @@ public class InMemoryDatabaseManager implements DataBaseManager{
 
     @Override
     public void clear(String tableName) {
-        validateTable(tableName);
-            data.clear();
+       get(tableName).clear();
+
+
+
+    }
+
+    private List<DataSet> get(String tableName) {
+
+        if(!tables.containsKey(tableName)){
+            tables.put(tableName,new LinkedList<DataSet>());
+        }
+     return tables.get(tableName);
+
     }
 
     @Override
     public void create(String tableName, DataSet input) {
-       data.add(input);
+   get(tableName).add(input);
 
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-     validateTable(tableName);
-        for (DataSet dataSet : data) {
+
+        for (DataSet dataSet : get(tableName)) {
             if (dataSet.get("id").equals(id)) {
                 dataSet.updateFrom(newValue);
 

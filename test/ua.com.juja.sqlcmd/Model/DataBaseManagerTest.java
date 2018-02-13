@@ -26,6 +26,8 @@ public abstract  class DataBaseManagerTest {
 
         manager = new JDBCDataBaseManager();
         manager.connect("MySqlCmd", "postgres", "java");
+        manager.getTableData("users");
+        manager.getTableData("test");
     }
 
     @Test

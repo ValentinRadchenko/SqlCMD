@@ -12,7 +12,7 @@ public class MainController {
 
     private Command[] commands;
     private View view;
-    private DataBaseManager manager;
+    private DataBaseManager  manager;
 
     public MainController(View view, DataBaseManager manager) {
         this.view = view;
